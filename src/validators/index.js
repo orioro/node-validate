@@ -6,6 +6,7 @@ import * as BOOLEAN_VALIDATORS from './boolean'
 import * as EQUALITY_VALIDATORS from './equality'
 import * as OPTIONS_VALIDATORS from './options'
 import * as OBJECT_VALIDATORS from './object'
+import * as MISCELLANEOUS_VALIDATORS from './miscellaneous'
 
 export {
   LOGICAL_VALIDATORS,
@@ -16,4 +17,5 @@ export {
   EQUALITY_VALIDATORS,
   OPTIONS_VALIDATORS,
   OBJECT_VALIDATORS,
+  MISCELLANEOUS_VALIDATORS,
 }
