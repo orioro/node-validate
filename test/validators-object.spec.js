@@ -43,4 +43,33 @@ describe('Object validators', () => {
     expect(validate(validation, {})).toEqual(true)
     expect(validate(validation, new Test())).toEqual(false)
   })
+
+  test('objectMatches', () => {
+    const validation = {
+      objectMatches: {
+        query: {
+          categories: 'category-A',
+          comments: {
+            $gte: 10,
+            $lt: 20
+          }
+        }
+      }
+    }
+
+    expect(validate(validation, {
+      categories: ['category-A', 'category-B', 'category-C'],
+      comments: 15
+    })).toEqual(true)
+
+    expect(validate(validation, {
+      categories: ['category-A', 'category-B', 'category-C'],
+      comments: 60
+    })).toEqual(false)
+
+    expect(validate(validation, {
+      categories: ['category-B', 'category-C'],
+      comments: 15
+    })).toEqual(false)
+  })
 })

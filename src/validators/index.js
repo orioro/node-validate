@@ -7,6 +7,8 @@ import * as EQUALITY_VALIDATORS from './equality'
 import * as OPTIONS_VALIDATORS from './options'
 import * as OBJECT_VALIDATORS from './object'
 import * as MISCELLANEOUS_VALIDATORS from './miscellaneous'
+import * as DATE_VALIDATORS from './date'
+import * as URL_VALIDATORS from './url'
 
 export {
   LOGICAL_VALIDATORS,

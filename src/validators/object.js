@@ -1,4 +1,5 @@
 import isPlainObject from 'lodash.isplainobject'
+import mingo from 'mingo'
 import validate from '../validate'
 
 export const object = ({}, value) => {
@@ -7,4 +8,10 @@ export const object = ({}, value) => {
 
 export const objectPlain = ({}, value) => {
   return isPlainObject(value)
+}
+
+export const objectMatches = ({ query }, value) => {
+  query = new mingo.Query(query)
+
+  return query.test(value)
 }

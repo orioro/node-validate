@@ -5,8 +5,7 @@
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "scripts": {
-    "test": "jest",
-    "test-coverage": "jest --coverage",
+    "test": "jest --coverage",
     "serve": "browser-sync start --server demo --watch --ignore **/*/index.js --no-ui --no-ghost-mode",
     "dev-serve": "npm run serve & rollup --config ./rollup/dev.config.js --watch",
     "dev-test": "jest --watch",
