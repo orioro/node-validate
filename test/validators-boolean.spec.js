@@ -9,7 +9,7 @@ describe('Boolean validators', () => {
     validators: {
       ...BOOLEAN_VALIDATORS
     },
-    onError: 'returnError'
+    onError: 'returnFalse'
   })
 
   test('boolean', () => {
@@ -23,5 +23,6 @@ describe('Boolean validators', () => {
     expect(validate(validation, null)).toEqual(true)
     expect(validate(validation, true)).toEqual(true)
     expect(validate(validation, false)).toEqual(true)
+    expect(validate(validation, 5)).toEqual(false)
   })
 })
