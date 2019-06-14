@@ -25,6 +25,9 @@ describe('Options validators', () => {
     expect(validate(validation, 'option-1')).toEqual(true)
     expect(validate(validation, 'none-of-the-options')).toEqual(false)
     expect(validate(validation, new Date())).toEqual(false)
+    expect(validate(validation, ['option-1', 'option-3'])).toEqual(true)
+    expect(validate(validation, ['option-1', 'option-3', 'option-4'])).toEqual(false)
+    expect(validate(validation, [])).toEqual(true)
   })
 
   test('optionsReject', () => {
@@ -40,5 +43,8 @@ describe('Options validators', () => {
     expect(validate(validation, 'option-1')).toEqual(false)
     expect(validate(validation, 'none-of-the-options')).toEqual(true)
     expect(validate(validation, new Date())).toEqual(true)
+    expect(validate(validation, ['option-1', 'option-3'])).toEqual(false)
+    expect(validate(validation, ['option-1', 'option-3', 'option-4'])).toEqual(false)
+    expect(validate(validation, [])).toEqual(true)
   })
 })
