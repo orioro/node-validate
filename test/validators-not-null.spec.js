@@ -4,7 +4,7 @@ const {
   NUMBER_VALIDATORS,
 } = require('../src')
 
-describe('notNull', () => {
+describe('notNull validator', () => {
 
   const validate = validator({
     validators: {

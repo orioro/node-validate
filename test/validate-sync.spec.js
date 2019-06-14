@@ -3,7 +3,7 @@ const {
   validator,
 } = require('../src')
 
-describe('Validate Sync', () => {
+describe('validate (sync)', () => {
   const validate = validator({
     validators: {
       isEven: ({}, value) => {

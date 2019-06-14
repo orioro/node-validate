@@ -4,7 +4,7 @@ const {
   NUMBER_VALIDATORS,
 } = require('../src')
 
-describe('notUndefined', () => {
+describe('notUndefined validator', () => {
 
   const validate = validator({
     validators: {

@@ -4,7 +4,7 @@ import {
   BOOLEAN_VALIDATORS,
 } from '../src'
 
-describe('Boolean validators', () => {
+describe('boolean validators', () => {
   const validate = validator({
     validators: {
       ...BOOLEAN_VALIDATORS

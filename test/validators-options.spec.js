@@ -4,7 +4,7 @@ import {
   OPTIONS_VALIDATORS,
 } from '../src'
 
-describe('Options validators', () => {
+describe('options validators', () => {
   const validate = validator({
     validators: {
       ...OPTIONS_VALIDATORS

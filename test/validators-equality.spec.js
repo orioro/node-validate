@@ -4,7 +4,7 @@ import {
   EQUALITY_VALIDATORS,
 } from '../src'
 
-describe('Boolean validators', () => {
+describe('equality validators', () => {
   const validate = validator({
     validators: {
       ...EQUALITY_VALIDATORS

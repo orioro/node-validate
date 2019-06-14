@@ -4,7 +4,7 @@ import {
   OBJECT_VALIDATORS,
 } from '../src'
 
-describe('Object validators', () => {
+describe('object validators', () => {
   const validate = validator({
     validators: {
       ...OBJECT_VALIDATORS

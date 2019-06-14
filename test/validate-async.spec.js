@@ -5,7 +5,7 @@ const {
   LOGICAL_VALIDATORS,
 } = require('../src')
 
-describe('Validate Async', () => {
+describe('validate (async)', () => {
 
   const shouldHaveRejected = res => {
     throw new Error('Should have rejected')

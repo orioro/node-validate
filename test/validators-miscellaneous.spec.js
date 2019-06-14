@@ -4,7 +4,7 @@ import {
   MISCELLANEOUS_VALIDATORS,
 } from '../src'
 
-describe('Miscellaneous validators', () => {
+describe('miscellaneous validators', () => {
   const validate = validator({
     validators: {
       ...MISCELLANEOUS_VALIDATORS

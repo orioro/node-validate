@@ -5,7 +5,7 @@ const {
   LOGICAL_VALIDATORS,
 } = require('../src')
 
-describe('Validator: or', () => {
+describe('or validator', () => {
 
   const validate = validator({
     validators: {

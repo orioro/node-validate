@@ -5,7 +5,7 @@ import {
   STRING_VALIDATORS,
 } from '../src'
 
-describe('Array validators', () => {
+describe('array validators', () => {
 
   const validate = validator({
     validators: {
