@@ -58,6 +58,18 @@ describe('String validators', () => {
     expect(validate(validation, '123456789').errors[0].message).toEqual(validation.stringMaxLength._message)
   })
 
+  test('stringExactLength', () => {
+    const validation = {
+      stringExactLength: {
+        length: 3,
+      }
+    }
+
+    expect(validate(validation, '123')).toEqual(true)
+    expect(validate(validation, '1234')).toBeInstanceOf(ValidationError)
+    expect(validate(validation, '12')).toBeInstanceOf(ValidationError)
+  })
+
   test('stringRegExp', () => {
     const validation = {
       stringRegExp: {

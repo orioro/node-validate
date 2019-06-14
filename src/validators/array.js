@@ -16,6 +16,10 @@ export const arrayMaxLength = ({ length }, value) => {
   return array({}, value) && value.length <= length
 }
 
+export const arrayExactLength = ({ length }, value) => {
+  return array({}, value) && value.length === length
+}
+
 const _arrayItemResolveResults = (config, value, options, results) => {
   const errors = results.reduce((acc, result) => {
     // Flatten errors

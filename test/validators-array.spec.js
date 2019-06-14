@@ -48,6 +48,18 @@ describe('Array validators', () => {
     expect(validate(validation, [1, 2, 3, 4])).toBeInstanceOf(ValidationError)
   })
 
+  test('arrayExactLength', () => {
+    const validation = {
+      arrayExactLength: {
+        length: 3,
+      }
+    }
+
+    expect(validate(validation, [1, 2, 3])).toEqual(true)
+    expect(validate(validation, [1, 2, 3, 4])).toBeInstanceOf(ValidationError)
+    expect(validate(validation, [1, 2])).toBeInstanceOf(ValidationError)
+  })
+
   test('arrayItem', () => {
     const validation = {
       arrayItem: {
