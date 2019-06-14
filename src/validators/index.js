@@ -4,6 +4,7 @@ import * as STRING_VALIDATORS from './string'
 import * as ARRAY_VALIDATORS from './array'
 import * as BOOLEAN_VALIDATORS from './boolean'
 import * as EQUALITY_VALIDATORS from './equality'
+import * as OPTIONS_VALIDATORS from './options'
 
 export {
   LOGICAL_VALIDATORS,
@@ -12,4 +13,5 @@ export {
   ARRAY_VALIDATORS,
   BOOLEAN_VALIDATORS,
   EQUALITY_VALIDATORS,
+  OPTIONS_VALIDATORS,
 }
