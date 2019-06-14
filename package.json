@@ -36,6 +36,7 @@
     "@orioro/util": "0.0.0",
     "is-url": "^1.2.4",
     "lodash.curry": "^4.1.1",
+    "lodash.isequal": "^4.5.0",
     "lodash.omit": "^4.5.0",
     "mingo": "^2.3.5"
   }
