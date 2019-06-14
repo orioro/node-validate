@@ -1,65 +1,126 @@
-const {
+import {
   ValidationError,
   validator,
-  NUMBER_VALIDATORS,
-} = require('../src')
+  ARRAY_VALIDATORS,
+  STRING_VALIDATORS,
+} from '../src'
 
-describe('notNull', () => {
+describe('Array validators', () => {
 
   const validate = validator({
     validators: {
-      ...NUMBER_VALIDATORS,
+      ...ARRAY_VALIDATORS,
+      ...STRING_VALIDATORS,
     },
     onError: 'returnError'
   })
 
-  test('Should fail when invoked with null', () => {
-    const validations = {
-      notNull: {
-        _message: 'Value must not be null',
+  test('array', () => {
+    const validation = {
+      array: {
+        _message: 'Value must be an array'
       }
     }
 
-    const err = validate(validations, null)
-
-    expect(err).toBeInstanceOf(ValidationError)
-    expect(err.errors).toEqual(expect.arrayContaining([
-      new Error('Value must not be null')
-    ]))
-    expect(validate(validations, 100)).toEqual(true)
-    expect(validate(validations, 10)).toEqual(true)
-    expect(validate(validations, 'STRING')).toEqual(true)
+    expect(validate(validation, [])).toEqual(true)
+    expect(validate(validation, {})).toBeInstanceOf(ValidationError)
   })
 
-  test('When used in combination with other validators', () => {
-    expect(validate({
-      number: true
-    }, null)).toEqual(true)
+  test('arrayMinLength', () => {
+    const validation = {
+      arrayMinLength: {
+        length: 3,
+      }
+    }
 
-    expect(validate({
-      number: true,
-      notNull: true
-    }, 5)).toEqual(true)
+    expect(validate(validation, [1, 2, 3])).toEqual(true)
+    expect(validate(validation, [1, 2])).toBeInstanceOf(ValidationError)
+  })
 
-    expect(validate({
-      number: true,
-      notNull: true
-    }, undefined)).toEqual(true)
+  test('arrayMaxLength', () => {
+    const validation = {
+      arrayMaxLength: {
+        length: 3,
+      }
+    }
 
-    const err1 = validate({
-      number: true,
-      notNull: true
-    }, null)
-    expect(err1).toBeInstanceOf(ValidationError)
-    expect(err1.errors.length).toEqual(1)
-    expect(err1.errors[0].validatorId).toEqual('notNull')
+    expect(validate(validation, [1, 2, 3])).toEqual(true)
+    expect(validate(validation, [1, 2, 3, 4])).toBeInstanceOf(ValidationError)
+  })
 
-    const err2 = validate({
-      number: true,
-      notNull: true
-    }, 'NOT A NUMBER')
-    expect(err2).toBeInstanceOf(ValidationError)
-    expect(err2.errors.length).toEqual(1)
-    expect(err2.errors[0].validatorId).toEqual('number')
+  test('arrayItem', () => {
+    const validation = {
+      arrayItem: {
+        validation: {
+          stringRegExp: {
+            regExp: /^[0-9]+$/
+          }
+        }
+      }
+    }
+
+    expect(validate(validation, ['123', '225', '4444'])).toEqual(true)
+    expect(validate(validation, ['123', '225', 'not-a-digit'])).toBeInstanceOf(ValidationError)
+  })
+
+  test('arrayItem async - valid', () => {
+    expect.assertions(1)
+
+    const validate = validator({
+      validators: {
+        ...ARRAY_VALIDATORS,
+        asyncAlwaysValid: () => {
+          return new Promise(resolve => {
+            setTimeout(resolve.bind(null, true), 100)
+          })
+        },
+      },
+      onError: 'returnError',
+      async: true
+    })
+
+    return expect(validate({
+      arrayItem: {
+        _message: 'Some invalid item in the array',
+        validation: {
+          asyncAlwaysValid: {}
+        }
+      }
+    }, ['item-1', 'item-2'])).resolves.toEqual(true)
+  })
+
+  test('arrayItem async - invalid', () => {
+    expect.assertions(5)
+
+    const validate = validator({
+      validators: {
+        ...ARRAY_VALIDATORS,
+        asyncAlwaysInvalid: () => {
+          return new Promise(resolve => {
+            setTimeout(resolve.bind(null, false), 100)
+          })
+        },
+      },
+      onError: 'returnError',
+      async: true
+    })
+
+    return validate({
+      arrayItem: {
+        _message: 'Some invalid item in the array',
+        validation: {
+          asyncAlwaysInvalid: {
+            _message: 'This validation is always invalid',
+          }
+        }
+      }
+    }, ['item-1', 'item-2'])
+    .then(error => {
+      expect(error).toBeInstanceOf(ValidationError)
+      expect(error.errors).toHaveLength(3)
+      expect(error.errors[0].message).toEqual('Some invalid item in the array')
+      expect(error.errors[1].message).toEqual('This validation is always invalid')
+      expect(error.errors[2].message).toEqual('This validation is always invalid')
+    })
   })
 })
