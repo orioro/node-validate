@@ -30,6 +30,7 @@
     "rollup-plugin-node-resolve": "^3.4.0"
   },
   "dependencies": {
+    "@orioro/util": "0.0.0",
     "is-url": "^1.2.4",
     "lodash.curry": "^4.1.1",
     "lodash.omit": "^4.5.0",

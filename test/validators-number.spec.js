@@ -94,6 +94,19 @@ describe('Number validators', () => {
     expect(validate(validations, 22)).toBeInstanceOf(ValidationError)
   })
 
+  test('numberMultipleOf (array of multipliers)', () => {
+    const validations = {
+      numberMultipleOf: {
+        multiplier: [2, 3, 5]
+      }
+    }
+
+    expect(validate(validations, 30)).toEqual(true)
+    expect(validate(validations, 4)).toBeInstanceOf(ValidationError)
+    expect(validate(validations, 6)).toBeInstanceOf(ValidationError)
+    expect(validate(validations, 15)).toBeInstanceOf(ValidationError)
+  })
+
   test('numberInteger', () => {
     const validations = {
       numberInteger: true,
@@ -112,6 +125,7 @@ describe('Number validators', () => {
     }
 
     expect(validate(validations, null)).toEqual(true)
+    expect(validate(validations, Infinity)).toEqual(true)
     expect(validate(validations, 10.1)).toEqual(true)
     expect(validate(validations, 10.12)).toEqual(true)
     expect(validate(validations, 10.123)).toBeInstanceOf(ValidationError)
