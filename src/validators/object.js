@@ -11,7 +11,5 @@ export const objectPlain = ({}, value) => {
 }
 
 export const objectMatches = ({ query }, value) => {
-  query = new mingo.Query(query)
-
-  return query.test(value)
+  return object({}, value) && (new mingo.Query(query)).test(value)
 }

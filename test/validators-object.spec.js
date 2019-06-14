@@ -71,5 +71,7 @@ describe('Object validators', () => {
       categories: ['category-B', 'category-C'],
       comments: 15
     })).toEqual(false)
+
+    expect(validate(validation, 4)).toEqual(false)
   })
 })
