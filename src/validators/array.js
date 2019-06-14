@@ -1,4 +1,4 @@
-import { validate } from '../'
+import validate from '../validate'
 
 export const array = ({}, value) => {
   return Array.isArray(value)

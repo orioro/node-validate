@@ -1,7 +1,8 @@
 const {
   ValidationError,
   validator,
-  numberValidators,
+  NUMBER_VALIDATORS,
+  LOGICAL_VALIDATORS,
 } = require('../src')
 
 describe('Validate Async', () => {
@@ -13,7 +14,8 @@ describe('Validate Async', () => {
   const validate = validator({
     async: true,
     validators: {
-      ...numberValidators,
+      ...NUMBER_VALIDATORS,
+      ...LOGICAL_VALIDATORS,
       asyncUnique: ({}, value) => {
         return new Promise(resolve => {
           setTimeout(() => {

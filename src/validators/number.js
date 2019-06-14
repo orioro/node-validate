@@ -49,14 +49,3 @@ export const numberMaxDecimalPlaces = ({ precision }, value) => {
 export const numberInteger = ({}, value) => {
   return Number.isInteger(value)
 }
-
-export const numberValidators = {
-  number,
-  numberMin,
-  numberMinExclusive,
-  numberMax,
-  numberMaxExclusive,
-  numberMultipleOf,
-  numberMaxDecimalPlaces,
-  numberInteger
-}

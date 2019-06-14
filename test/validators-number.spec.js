@@ -1,14 +1,14 @@
 const {
   ValidationError,
   validator,
-  numberValidators,
+  NUMBER_VALIDATORS,
 } = require('../src')
 
 describe('Number validators', () => {
 
   const validate = validator({
     validators: {
-      ...numberValidators,
+      ...NUMBER_VALIDATORS,
     },
     onError: 'returnError'
   })

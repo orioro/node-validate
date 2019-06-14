@@ -1,8 +1,8 @@
+import validate from '../../validate'
 import {
-  validate,
   ValidatorError,
   ValidationError
-} from '../../'
+} from '../../errors'
 
 const _resolveResults = (config, value, options, results) => {
   const errors = results.reduce((acc, result) => {
