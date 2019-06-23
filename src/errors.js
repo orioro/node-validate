@@ -1,3 +1,5 @@
+import isPlainObject from 'lodash.isplainobject'
+
 const _getValidatorErrorMessage = (validatorId, config, value) => {
   switch (typeof config._message) {
     case 'function':
@@ -48,6 +50,10 @@ export class ValidatorError extends Error {
 export class ValidationError extends Error {
   constructor(value, errors) {
     const errorMessages = errors.map(err => err.message).join(', ')
+
+    value = isPlainObject(value) || Array.isArray(value) ?
+      JSON.stringify(value) : value
+
     super(`Invalid value: '${value}'. Error messages: ${errorMessages}`)
 
     this.name = 'ValidationError'

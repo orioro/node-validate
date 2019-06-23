@@ -60,9 +60,9 @@ describe('array validators', () => {
     expect(validate(validation, [1, 2])).toBeInstanceOf(ValidationError)
   })
 
-  test('arrayItem', () => {
+  test('arrayItems', () => {
     const validation = {
-      arrayItem: {
+      arrayItems: {
         validation: {
           stringRegExp: {
             regExp: /^[0-9]+$/
@@ -75,7 +75,7 @@ describe('array validators', () => {
     expect(validate(validation, ['123', '225', 'not-a-digit'])).toBeInstanceOf(ValidationError)
   })
 
-  test('arrayItem async - valid', () => {
+  test('arrayItems async - valid', () => {
     expect.assertions(1)
 
     const validate = validator({
@@ -92,7 +92,7 @@ describe('array validators', () => {
     })
 
     return expect(validate({
-      arrayItem: {
+      arrayItems: {
         _message: 'Some invalid item in the array',
         validation: {
           asyncAlwaysValid: {}
@@ -101,7 +101,7 @@ describe('array validators', () => {
     }, ['item-1', 'item-2'])).resolves.toEqual(true)
   })
 
-  test('arrayItem async - invalid', () => {
+  test('arrayItems async - invalid', () => {
     expect.assertions(5)
 
     const validate = validator({
@@ -118,7 +118,7 @@ describe('array validators', () => {
     })
 
     return validate({
-      arrayItem: {
+      arrayItems: {
         _message: 'Some invalid item in the array',
         validation: {
           asyncAlwaysInvalid: {

@@ -1,8 +1,7 @@
 import validate from '../validate'
 import {
-  ValidationError,
-  ValidatorError
-} from '../errors'
+  resolveNestedValidationResults
+} from '../util'
 
 export const array = ({}, value) => {
   return Array.isArray(value)
@@ -20,27 +19,17 @@ export const arrayExactLength = ({ length }, value) => {
   return array({}, value) && value.length === length
 }
 
-const _arrayItemResolveResults = (config, value, options, results) => {
-  const errors = results.reduce((acc, result) => {
-    // Flatten errors
-    return result instanceof ValidationError ? [...acc, ...result.errors] : acc
-  }, [])
-
-  return errors.length > 0 ?
-    [new ValidatorError('arrayItem', config, value), ...errors] : true
-}
-
-const _arrayItemAsync = (config, value, options) => {
+const _arrayItemsAsync = (config, value, options) => {
   options = {
     ...options,
     onError: 'returnError'
   }
 
   return Promise.all(value.map(item => validate(options, config.validation, item)))
-    .then(results => _arrayItemResolveResults(config, value, options, results))
+    .then(results => resolveNestedValidationResults('arrayItems', config, value, options, results))
 }
 
-const _arrayItemSync = (config, value, options) => {
+const _arrayItemsSync = (config, value, options) => {
   options = {
     ...options,
     onError: 'returnError'
@@ -48,11 +37,11 @@ const _arrayItemSync = (config, value, options) => {
 
   const results = value.map(item => validate(options, config.validation, item))
 
-  return _arrayItemResolveResults(config, value, options, results)
+  return resolveNestedValidationResults('arrayItems', config, value, options, results)
 }
 
-export const arrayItem = (config, value, options) => {
-  return options.async ?
-    array({}, value) && _arrayItemAsync(config, value, options) :
-    array({}, value) && _arrayItemSync(config, value, options)
+export const arrayItems = (config, value, options) => {
+  return array({}, value) && options.async ?
+    array({}, value) && _arrayItemsAsync(config, value, options) :
+    array({}, value) && _arrayItemsSync(config, value, options)
 }
