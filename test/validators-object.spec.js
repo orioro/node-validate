@@ -1,6 +1,7 @@
 import {
   ValidationError,
   validator,
+  STRING_VALIDATORS,
   ARRAY_VALIDATORS,
   NUMBER_VALIDATORS,
   OBJECT_VALIDATORS,
@@ -200,6 +201,260 @@ describe('object validators', () => {
       expect(err2.errors[0].message).toEqual('Validation of the object failed')
       expect(err2.errors[1].message).toEqual('someProperty SOME OTHER VALUE is not equal to TEST')
       expect(err2.errors[2].message).toEqual('someOtherProperty AGAIN, ANOTHER VALUE is not equal to TEST')
+    })
+  })
+
+  test('objectProperties deep nesting', () => {
+    const validateDeep = validator({
+      validators: {
+        ...STRING_VALIDATORS,
+        ...OBJECT_VALIDATORS,
+      },
+      onError: 'returnError'
+    })
+
+    const validation = {
+      objectPlain: {
+        message: 'must be a plain object'
+      },
+      objectProperties: {
+        message: 'Root has invalid values',
+        properties: {
+          title: {
+            notNull: {
+              message: 'Value is required'
+            },
+            notUndefined: {
+              message: 'Value is required'
+            }
+          },
+          description: {
+            notNull: {
+              message: 'Value is required'
+            },
+            notUndefined: {
+              message: 'Value is required'
+            }
+          },
+          place: {
+            objectProperties: {
+              message: 'Place has invalid values',
+              properties: {
+                name: {
+                  notNull: {
+                    message: 'Value is required'
+                  },
+                  notUndefined: {
+                    message: 'Value is required'
+                  }
+                },
+                address: {
+                  notNull: {
+                    message: 'Value is required'
+                  },
+                  notUndefined: {
+                    message: 'Value is required'
+                  },
+                  objectProperties: {
+                    message: 'Address has invalid values',
+                    properties: {
+                      line_1: {
+                        stringMinLength: {
+                          length: 10,
+                          message: 'Address line_1 must have at least 10 chars',
+                        },
+                        stringMaxLength: {
+                          length: 15,
+                          message: 'Address line_1 must have at most 15 chars',
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    expect(validateDeep(validation, {
+      title: 'Title',
+      description: 'Description',
+      place: {
+        name: 'Somewhere',
+        address: {
+          line_1: '123456789012345'
+        }
+      }
+    }))
+    .toEqual(true)
+
+    expect(validateDeep(validation, {
+      title: 'Title',
+      description: 'Description',
+      place: {
+        name: 'Somewhere',
+        address: {}
+      }
+    }))
+    .toEqual(true)
+
+    const error1 = validateDeep(validation, {
+      title: 'Title',
+      description: 'Description',
+      place: {
+        name: 'Somewhere',
+        address: {
+          line_1: '123456789012345 MORE THAN 15'
+        }
+      }
+    })
+
+    expect(error1).toBeInstanceOf(ValidationError)
+    expect(error1.errors).toHaveLength(4)
+    expect(error1.errors[0].message).toEqual('Root has invalid values')
+    expect(error1.errors[1].message).toEqual('Place has invalid values')
+    expect(error1.errors[2].message).toEqual('Address has invalid values')
+    expect(error1.errors[3].message).toEqual('Address line_1 must have at most 15 chars')
+
+    const error2 = validateDeep(validation, {
+      description: 'Description',
+      place: {
+        name: 'Somewhere',
+        address: {
+          line_1: '123456789012345'
+        }
+      }
+    })
+
+    expect(error2).toBeInstanceOf(ValidationError)
+    expect(error2.errors).toHaveLength(2)
+    expect(error2.errors[0].message).toEqual('Root has invalid values')
+    expect(error2.errors[1].message).toEqual('Value is required')
+  })
+
+
+  test('objectProperties deep nesting - ASYNC', () => {
+
+    expect.assertions(7)
+
+    const validateDeepAsync = validator({
+      async: true,
+      validators: {
+        stringMinLengthAsync: ({ length }, value) => {
+          return new Promise(resolve => {
+            setTimeout(() => {
+              resolve(value.length >= length)
+            }, 50)
+          })
+        },
+        stringMaxLengthAsync: ({ length }, value) => {
+          return new Promise(resolve => {
+            setTimeout(() => {
+              resolve(value.length <= length)
+            }, 50)
+          })
+        },
+        ...OBJECT_VALIDATORS,
+      },
+      onError: 'returnError'
+    })
+
+    const validation = {
+      objectPlain: {
+        message: 'must be a plain object'
+      },
+      objectProperties: {
+        message: 'Root has invalid values',
+        properties: {
+          title: {
+            notNull: {
+              message: 'Value is required'
+            },
+            notUndefined: {
+              message: 'Value is required'
+            }
+          },
+          description: {
+            notNull: {
+              message: 'Value is required'
+            },
+            notUndefined: {
+              message: 'Value is required'
+            }
+          },
+          place: {
+            objectProperties: {
+              message: 'Place has invalid values',
+              properties: {
+                name: {
+                  notNull: {
+                    message: 'Value is required'
+                  },
+                  notUndefined: {
+                    message: 'Value is required'
+                  }
+                },
+                address: {
+                  notNull: {
+                    message: 'Value is required'
+                  },
+                  notUndefined: {
+                    message: 'Value is required'
+                  },
+                  objectProperties: {
+                    message: 'Address has invalid values',
+                    properties: {
+                      line_1: {
+                        stringMinLengthAsync: {
+                          length: 10,
+                          message: 'Address line_1 must have at least 10 chars',
+                        },
+                        stringMaxLengthAsync: {
+                          length: 15,
+                          message: 'Address line_1 must have at most 15 chars',
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    expect(validateDeepAsync(validation, {
+      title: 'Title',
+      description: 'Description',
+      place: {
+        name: 'Somewhere',
+        address: {
+          line_1: '123456789012345'
+        }
+      }
+    }))
+    .resolves.toEqual(true)
+
+    return validateDeepAsync(validation, {
+      title: 'Title',
+      description: 'Description',
+      place: {
+        name: 'Somewhere',
+        address: {
+          line_1: '123456789'
+        }
+      }
+    })
+    .then(err => {
+      expect(err).toBeInstanceOf(ValidationError)
+      expect(err.errors).toHaveLength(4)
+      expect(err.errors[0].message).toEqual('Root has invalid values')
+      expect(err.errors[1].message).toEqual('Place has invalid values')
+      expect(err.errors[2].message).toEqual('Address has invalid values')
+      expect(err.errors[3].message).toEqual('Address line_1 must have at least 10 chars')
     })
   })
 })
