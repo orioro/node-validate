@@ -38,41 +38,41 @@ describe('ValidationError', () => {
 
 describe('ValidatorError', () => {
   test('basic', () => {
-    const _message = ({ value, config1, config2 }) => {
+    const message = ({ value, config1, config2 }) => {
       return `${value} is invalid, should match criteria: ${config1}, ${config2}`
     }
 
     const config = {
       config1: true,
       config2: 70,
-      _message: _message
+      message: message
     }
     const value = 'Some value'
 
     const error = new ValidatorError('someValidatorId', config, value)
 
     expect(error.name).toEqual('ValidatorError')
-    expect(error.message).toEqual(_message({...config, value}))
+    expect(error.message).toEqual(message({...config, value}))
     expect(error.value).toEqual(value)
     expect(error.validatorId).toEqual('someValidatorId')
   })
 
   test('toJSON', () => {
-    const _message = ({ value, config1, config2 }) => {
+    const message = ({ value, config1, config2 }) => {
       return `${value} is invalid, should match criteria: ${config1}, ${config2}`
     }
 
     const config = {
       config1: true,
       config2: 70,
-      _message: _message
+      message: message
     }
     const value = 'Some value'
 
     const error = new ValidatorError('someValidatorId', config, value)
 
     expect(JSON.parse(JSON.stringify(error.toJSON()))).toEqual({
-      message: _message({...config, value}),
+      message: message({...config, value}),
       name: 'ValidatorError',
       value,
     })

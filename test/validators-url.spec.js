@@ -15,7 +15,7 @@ describe('url validators', () => {
   test('url', () => {
     const validation = {
       url: {
-        _message: 'Value must be a url'
+        message: 'Value must be a url'
       }
     }
 

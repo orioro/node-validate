@@ -17,7 +17,7 @@ describe('date validators', () => {
   test('date', () => {
     const validation = {
       date: {
-        _message: 'Value must be a date'
+        message: 'Value must be a date'
       }
     }
 
@@ -31,7 +31,7 @@ describe('date validators', () => {
   test('dateMin', () => {
     const validation = {
       dateMin: {
-        _message: 'Value must be a date later than',
+        message: 'Value must be a date later than',
         threshold: '2019-05-02',
       }
     }
@@ -44,7 +44,7 @@ describe('date validators', () => {
   test('dateMinExclusive', () => {
     const validation = {
       dateMinExclusive: {
-        _message: 'Value must be a date later than',
+        message: 'Value must be a date later than',
         threshold: '2019-05-02',
       }
     }
@@ -57,7 +57,7 @@ describe('date validators', () => {
   test('dateMax', () => {
     const validation = {
       dateMax: {
-        _message: 'Value must be a date later than',
+        message: 'Value must be a date later than',
         threshold: '2019-05-02',
       }
     }
@@ -70,7 +70,7 @@ describe('date validators', () => {
   test('dateMaxExclusive', () => {
     const validation = {
       dateMaxExclusive: {
-        _message: 'Value must be a date later than',
+        message: 'Value must be a date later than',
         threshold: '2019-05-02',
       }
     }

@@ -21,7 +21,7 @@ describe('miscellaneous validators', () => {
 
     const validation = {
       instanceOf: {
-        _message: 'Value must be instanceof Person',
+        message: 'Value must be instanceof Person',
         constructor: Person
       }
     }
@@ -46,7 +46,7 @@ describe('values validators', () => {
   test('valuesAllow', () => {
     const validation = {
       valuesAllow: {
-        _message: 'Value must be in the allowed values list',
+        message: 'Value must be in the allowed values list',
         values: [1, 'option-1', 'option-2', 'option-3']
       }
     }
@@ -64,7 +64,7 @@ describe('values validators', () => {
   test('valuesReject', () => {
     const validation = {
       valuesReject: {
-        _message: 'Value must not be in the rejected values list',
+        message: 'Value must not be in the rejected values list',
         values: [1, 'option-1', 'option-2', 'option-3']
       }
     }

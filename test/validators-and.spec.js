@@ -18,18 +18,18 @@ describe('and validator', () => {
   test('Should require ALL validations to pass', () => {
     const validation = {
       and: {
-        _message: 'Must be multiple of 10 AND not multiple of 3',
+        message: 'Must be multiple of 10 AND not multiple of 3',
         validations: [
           {
             numberMultipleOf: {
-              _message: 'Must be multiple of 10',
+              message: 'Must be multiple of 10',
               multiplier: 10,
             }
           },
           {
             numberMultipleOf: {
               _negative: true,
-              _message: 'Must not be multiple of 3',
+              message: 'Must not be multiple of 3',
               multiplier: 3
             }
           }

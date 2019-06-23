@@ -18,17 +18,17 @@ describe('or validator', () => {
   test('Should require ONE OF THE validations to pass', () => {
     const validation = {
       or: {
-        _message: 'Must be multiple of 10 OR multiple of 3',
+        message: 'Must be multiple of 10 OR multiple of 3',
         validations: [
           {
             numberMultipleOf: {
-              _message: 'Must be multiple of 10',
+              message: 'Must be multiple of 10',
               multiplier: 10,
             }
           },
           {
             numberMultipleOf: {
-              _message: 'Must be multiple of 3',
+              message: 'Must be multiple of 3',
               multiplier: 3
             }
           }

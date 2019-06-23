@@ -15,7 +15,7 @@ describe('boolean validators', () => {
   test('boolean', () => {
     const validation = {
       boolean: {
-        _message: 'Value must be a boolean'
+        message: 'Value must be a boolean'
       }
     }
 

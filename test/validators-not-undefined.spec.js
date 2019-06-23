@@ -16,7 +16,7 @@ describe('notUndefined validator', () => {
   test('Should fail when invoked with undefined', () => {
     const validations = {
       notUndefined: {
-        _message: 'Value must not be undefined',
+        message: 'Value must not be undefined',
       }
     }
 

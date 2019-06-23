@@ -28,7 +28,7 @@ describe('validate (sync)', () => {
     }, 10)).toEqual(true)
 
     const err = validate({
-      isEven: { _message: 'Value must be even!' }
+      isEven: { message: 'Value must be even!' }
     }, 11)
 
     expect(err).toBeInstanceOf(ValidationError)
@@ -39,7 +39,7 @@ describe('validate (sync)', () => {
 
   test('message function', () => {
     const err = validate({
-      isEven: { _message: ({ value }) => `${value} is not even` }
+      isEven: { message: ({ value }) => `${value} is not even` }
     }, 11)
 
     expect(err).toBeInstanceOf(ValidationError)
@@ -119,7 +119,7 @@ describe('validate (sync)', () => {
 
       const err = validate({
         alwaysFail: {
-          _message: 'Some error message'
+          message: 'Some error message'
         }
       }, 'some-value')
 
@@ -136,7 +136,7 @@ describe('validate (sync)', () => {
 
       expect(validate({
         alwaysFail: {
-          _message: 'Some error message'
+          message: 'Some error message'
         }
       }, 'some-value')).toEqual(false)
     })
@@ -150,7 +150,7 @@ describe('validate (sync)', () => {
       expect(() => {
         validate({
           alwaysFail: {
-            _message: 'Some error message'
+            message: 'Some error message'
           }
         }, 'some-value')
       }).toThrow(/Invalid value: 'some-value'/)

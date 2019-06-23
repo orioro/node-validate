@@ -79,7 +79,7 @@ describe('validate (async)', () => {
   test('basic: valid', () => {
     return expect(validate({
       asyncUnique: {
-        _message: 'Value must be unique'
+        message: 'Value must be unique'
       }
     }, 'unique-id')).resolves.toEqual(true)
   })
@@ -88,7 +88,7 @@ describe('validate (async)', () => {
     expect.assertions(4)
     return validate({
       asyncUnique: {
-        _message: 'Value must be unique'
+        message: 'Value must be unique'
       }
     }, 'id-one')
     .then(shouldHaveRejected, err => {
@@ -245,20 +245,20 @@ describe('validate (async)', () => {
     expect.assertions(6)
     return validate({
       and: {
-        _message: 'Must be within both ranges',
+        message: 'Must be within both ranges',
         validations: [
           {
             asyncWithinRange: {
               min: 0,
               max: 50,
-              _message: 'Must be between 0 and 50'
+              message: 'Must be between 0 and 50'
             }
           },
           {
             asyncWithinRange: {
               min: 45,
               max: 100,
-              _message: 'Must be between 45 and 100'
+              message: 'Must be between 45 and 100'
             }
           }
         ]

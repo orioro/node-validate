@@ -24,7 +24,7 @@ describe('equality validators', () => {
 
     const validation = {
       identity: {
-        _message: 'Value must be a identity',
+        message: 'Value must be a identity',
         value: a,
       }
     }
@@ -46,7 +46,7 @@ describe('equality validators', () => {
 
     const validation = {
       deepEqual: {
-        _message: 'Value must be a deepEqual',
+        message: 'Value must be a deepEqual',
         value: a,
       }
     }

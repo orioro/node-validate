@@ -18,7 +18,7 @@ describe('array validators', () => {
   test('array', () => {
     const validation = {
       array: {
-        _message: 'Value must be an array'
+        message: 'Value must be an array'
       }
     }
 
@@ -93,7 +93,7 @@ describe('array validators', () => {
 
     return expect(validate({
       arrayItems: {
-        _message: 'Some invalid item in the array',
+        message: 'Some invalid item in the array',
         validation: {
           asyncAlwaysValid: {}
         }
@@ -119,10 +119,10 @@ describe('array validators', () => {
 
     return validate({
       arrayItems: {
-        _message: 'Some invalid item in the array',
+        message: 'Some invalid item in the array',
         validation: {
           asyncAlwaysInvalid: {
-            _message: 'This validation is always invalid',
+            message: 'This validation is always invalid',
           }
         }
       }

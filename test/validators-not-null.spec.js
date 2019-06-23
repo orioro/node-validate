@@ -16,7 +16,7 @@ describe('notNull validator', () => {
   test('Should fail when invoked with null', () => {
     const validations = {
       notNull: {
-        _message: 'Value must not be null',
+        message: 'Value must not be null',
       }
     }
 

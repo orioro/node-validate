@@ -1,15 +1,15 @@
 import isPlainObject from 'lodash.isplainobject'
 
 const _getValidatorErrorMessage = (validatorId, config, value) => {
-  switch (typeof config._message) {
+  switch (typeof config.message) {
     case 'function':
-      return config._message({
+      return config.message({
         ...config,
         validatorId,
         value
       })
     case 'string':
-      return config._message
+      return config.message
     default:
       return `Validation \`${validatorId}\` failed.`
   }

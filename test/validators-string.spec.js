@@ -15,7 +15,7 @@ describe('string validators', () => {
   test('string', () => {
     const validation = {
       string: {
-        _message: 'Value must be a string',
+        message: 'Value must be a string',
       }
     }
 
@@ -30,7 +30,7 @@ describe('string validators', () => {
     const validation = {
       stringMinLength: {
         length: 8,
-        _message: 'Password must be at least 8 chars long',
+        message: 'Password must be at least 8 chars long',
       }
     }
 
@@ -46,7 +46,7 @@ describe('string validators', () => {
     const validation = {
       stringMaxLength: {
         length: 8,
-        _message: 'Password must be at most 8 chars long',
+        message: 'Password must be at most 8 chars long',
       }
     }
 
@@ -55,7 +55,7 @@ describe('string validators', () => {
     expect(validate(validation, '12345678')).toEqual(true)
     expect(validate(validation, '1234567')).toEqual(true)
     expect(validate(validation, '123456789')).toBeInstanceOf(ValidationError)
-    expect(validate(validation, '123456789').errors[0].message).toEqual(validation.stringMaxLength._message)
+    expect(validate(validation, '123456789').errors[0].message).toEqual(validation.stringMaxLength.message)
   })
 
   test('stringExactLength', () => {
@@ -74,7 +74,7 @@ describe('string validators', () => {
     const validation = {
       stringRegExp: {
         regExp: /^[0-9]+$/,
-        _message: 'Digits only, at least one',
+        message: 'Digits only, at least one',
       }
     }
 

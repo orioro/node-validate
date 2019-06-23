@@ -17,7 +17,7 @@ describe('object validators', () => {
   test('object', () => {
     const validation = {
       object: {
-        _message: 'Value must be a object'
+        message: 'Value must be a object'
       }
     }
 
@@ -30,7 +30,7 @@ describe('object validators', () => {
   test('objectPlain', () => {
     const validation = {
       objectPlain: {
-        _message: 'Value must be a plain object'
+        message: 'Value must be a plain object'
       }
     }
 
@@ -89,22 +89,22 @@ describe('object validators', () => {
 
     const validation = {
       objectProperties: {
-        _message: 'Validation of the object failed',
+        message: 'Validation of the object failed',
         properties: {
           commentCount: {
             numberMin: {
               threshold: 20,
-              _message: 'Must be at least 20',
+              message: 'Must be at least 20',
             },
             numberMax: {
               threshold: 30,
-              _message: 'Must be at most 30',
+              message: 'Must be at most 30',
             }
           },
           categories: {
             arrayMinLength: {
               length: 3,
-              _message: 'Must contain at least 3 categories'
+              message: 'Must contain at least 3 categories'
             }
           }
         }
@@ -162,16 +162,16 @@ describe('object validators', () => {
         properties: {
           someProperty: {
             asyncEqualsToTest: {
-              _message: ({value}) => `someProperty ${value} is not equal to TEST`
+              message: ({value}) => `someProperty ${value} is not equal to TEST`
             }
           },
           someOtherProperty: {
             asyncEqualsToTest: {
-              _message: ({value}) => `someOtherProperty ${value} is not equal to TEST`
+              message: ({value}) => `someOtherProperty ${value} is not equal to TEST`
             }
           }
         },
-        _message: 'Validation of the object failed'
+        message: 'Validation of the object failed'
       }
     }
 
