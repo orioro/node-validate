@@ -457,4 +457,74 @@ describe('object validators', () => {
       expect(err.errors[3].message).toEqual('Address line_1 must have at least 10 chars')
     })
   })
+
+  test('objectWhen', () => {
+    const validate = validator({
+      validators: {
+        ...OBJECT_VALIDATORS
+      },
+      onError: 'returnError'
+    })
+
+    const validation = {
+      objectWhen: {
+        message: 'When quantity is > 40, validation failed',
+        criteria: {
+          quantity: {
+            $gt: 40
+          }
+        },
+        validation: {
+          objectProperties: {
+            message: 'Properties invalid',
+            properties: {
+              name: {
+                notNull: {
+                  message: 'Name must not be null, when quantity > 40',
+                },
+                notUndefined: {
+                  message: 'Name must not be undefined, when quantity > 40',
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    expect(validate(validation, {
+      quantity: 40,
+      name: null
+    }))
+    .toEqual(true)
+
+    expect(validate(validation, {
+      quantity: 41,
+      name: 'Somebody'
+    }))
+    .toEqual(true)
+
+    const error1 = validate(validation, {
+      quantity: 41,
+    })
+
+    expect(error1).toBeInstanceOf(ValidationError)
+    expect(error1.errors).toHaveLength(3)
+
+    expect(error1.errors[0].message).toEqual('When quantity is > 40, validation failed')
+    expect(error1.errors[1].message).toEqual('Properties invalid')
+    expect(error1.errors[2].message).toEqual('Name must not be undefined, when quantity > 40')
+
+    const error2 = validate(validation, {
+      quantity: 41,
+      name: null
+    })
+
+    expect(error2).toBeInstanceOf(ValidationError)
+    expect(error2.errors).toHaveLength(3)
+
+    expect(error2.errors[0].message).toEqual('When quantity is > 40, validation failed')
+    expect(error2.errors[1].message).toEqual('Properties invalid')
+    expect(error2.errors[2].message).toEqual('Name must not be null, when quantity > 40')
+  })
 })

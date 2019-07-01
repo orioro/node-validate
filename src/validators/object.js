@@ -17,6 +17,27 @@ export const objectMatches = ({ query }, value) => {
   return object({}, value) && (new mingo.Query(query)).test(value)
 }
 
+export const objectWhen = (config, value, options) => {
+  const { criteria, validation } = config
+  const isObject = object({}, value)
+
+  if (!object({}, value)) {
+    return false
+  }
+
+  if ((new mingo.Query(criteria)).test(value)) {
+    return resolveNestedValidationResults(
+      'objectWhen',
+      config,
+      value,
+      options,
+      [validate(options, validation, value)]
+    )
+  } else {
+    return true
+  }
+}
+
 const _objectPropertiesAsync = (config, value, options) => {
   const { properties } = config
   options = {
