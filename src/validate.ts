@@ -1,5 +1,10 @@
-import { evaluateBoolean, BooleanExpression } from '@orioro/expression'
+import {
+  BooleanExpression,
+  evaluateBoolean,
+  evaluateString
+} from '@orioro/expression'
 import { cascadeFilter, cascadeFind } from '@orioro/cascade'
+import { ValidationError } from './errors'
 
 export type ValidationErrorSpec = {
   code: string,
@@ -35,13 +40,20 @@ export const validate = (
   options:ValidateOptions,
   validations:Validation[],
   value:any
-):(ValidationErrorSpec[] | null) => (
-  cascadeFind(
+):(ValidationErrorSpec[] | null) => {
+  const error = cascadeFind(
     _isInvalid.bind(null, options.interpreters),
     validations,
     value
-  ) || null
-)
+  )
+
+  return error
+    ? {
+        ...error,
+        message: evaluateString(options.interpreters, error.message)
+      }
+    : null
+}
 
 export const validateAll = (
   options:ValidateOptions,
@@ -55,11 +67,33 @@ export const validateAll = (
   )
 
   return errors.length > 0
-    ? errors.map(({ code, message }) => ({
-        code,
-        message: typeof message === 'function'
-          ? message(value)
-          : message
+    ? errors.map((error) => ({
+        ...error,
+        message: evaluateString(options.interpreters, error.message)
       }))
     : null
+}
+
+export const validateThrow = (
+  options:ValidateOptions,
+  validations:Validation[],
+  value:any
+) => {
+  const error = validate(options, validations, value)
+
+  if (error !== null) {
+    throw new ValidationError([error], value)
+  }
+}
+
+export const validateAllThrow = (
+  options:ValidateOptions,
+  validations:Validation[],
+  value:any
+) => {
+  const errors = validateAll(options, validations, value)
+
+  if (errors !== null) {
+    throw new ValidationError(errors, value)
+  }
 }
