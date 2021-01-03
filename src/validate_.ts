@@ -16,7 +16,6 @@ import { ValidationError } from './errors'
 
 const VALIDATION = [
   '$if',
-  ['$eq', null],
   null,
   ['$switch', [
     [['$not', ['$eq', 'number', ['$type']]], {
@@ -30,21 +29,17 @@ const VALIDATION = [
       code: 'OUT_OF_RANGE',
       message: 'Must be a number between 1 and 10'
     }],
-  ], null]
+  ], null],
+  ['$eq', null]
 ]
 
-const check = value => evaluate({
+console.log(evaluate({
   interpreters: ALL_EXPRESSIONS,
   data: {
-    $$VALUE: value
+    $$VALUE: 9
   }
-}, VALIDATION)
+}, VALIDATION))
 
-console.log(check(9))
-console.log(check(11))
-console.log(check(0))
-console.log(check('9'))
-console.log(check(null))
 
 
 
