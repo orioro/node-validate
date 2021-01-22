@@ -1,147 +1,82 @@
 import {
-  BooleanExpression,
-  evaluateBoolean,
-  evaluateString,
-
+  ALL_EXPRESSIONS,
+  Expression,
+  ExpressionInterpreter,
   evaluate,
-  ALL_EXPRESSIONS
 } from '@orioro/expression'
-import { cascadeFilter, cascadeFind } from '@orioro/cascade'
 import { ValidationError } from './errors'
 
+import {
+  ValidationErrorSpec,
+  ValidationCase
+} from './types'
 
-
-
-
-
-const VALIDATION = [
-  '$if',
-  ['$eq', null],
-  null,
-  ['$switch', [
-    [['$not', ['$eq', 'number', ['$type']]], {
-      code: 'INVALID_NUMBER',
-      message: 'Must be a number'
-    }],
-    [['$not', ['$and', [
-      ['$gte', 1],
-      ['$lte', 10]
-    ]]], {
-      code: 'OUT_OF_RANGE',
-      message: 'Must be a number between 1 and 10'
-    }],
-  ], null]
-]
-
-const check = value => evaluate({
-  interpreters: ALL_EXPRESSIONS,
-  data: {
-    $$VALUE: value
-  }
-}, VALIDATION)
-
-console.log(check(9))
-console.log(check(11))
-console.log(check(0))
-console.log(check('9'))
-console.log(check(null))
-
-
-
-
-
-
-
-
-
-export type ValidationErrorSpec = {
-  code: string,
-  message: string
-}
-export type Validation = [BooleanExpression, ValidationErrorSpec]
 export type ValidateOptions = {
-  interpreters: {
-    [key: string]: () => any
-  }
+  interpreters: { [key: string]: ExpressionInterpreter },
 }
-
-const _isInvalid = (interpreters, exp, value) => !evaluateBoolean({
-  interpreters,
-  data: {
-    $$VALUE: value
-  }
-}, exp)
-
-const _checkValidations = (validations:Validation[]) => {
-  if (!Array.isArray(validations) && validations.length === 0) {
-    throw new Error(`Invalid validations ${JSON.stringify(validations)}`)
-  }
-
-  validations.forEach(validation => {
-    if (!Array.isArray(validation) || validation.length !== 2) {
-      throw new Error(`Invalid validation ${JSON.stringify(validation)}`)
-    }
-  })
+const DEFAULT_VALIDATE_OPTIONS = {
+  interpreters: ALL_EXPRESSIONS,
 }
 
 export const validate = (
-  options:ValidateOptions,
-  validations:Validation[],
-  value:any
+  validationExpression:Expression,
+  value:any,
+  { interpreters }:ValidateOptions = DEFAULT_VALIDATE_OPTIONS
 ):(ValidationErrorSpec[] | null) => {
-  const error = cascadeFind(
-    _isInvalid.bind(null, options.interpreters),
-    validations,
-    value
-  )
+  const result = evaluate({
+    interpreters,
+    scope: { $$VALUE: value }
+  }, validationExpression)
 
-  return error
-    ? {
-        ...error,
-        message: evaluateString(options.interpreters, error.message)
-      }
-    : null
-}
-
-export const validateAll = (
-  options:ValidateOptions,
-  validations:Validation[],
-  value:any
-):(ValidationErrorSpec[] | null) => {
-  const errors = cascadeFilter(
-    _isInvalid.bind(null, options.interpreters),
-    validations,
-    value
-  )
-
-  return errors.length > 0
-    ? errors.map((error) => ({
-        ...error,
-        message: evaluateString(options.interpreters, error.message)
-      }))
-    : null
+  return typeof result === 'string'
+    ? [{ code: result }]
+    : Array.isArray(result)
+      ? result.length === 0
+        ? null
+        : result
+      : result === null
+        ? null
+        : [result]
 }
 
 export const validateThrow = (
-  options:ValidateOptions,
-  validations:Validation[],
-  value:any
-) => {
-  const error = validate(options, validations, value)
+  validationExpression:Expression,
+  value:any,
+  options:ValidateOptions = DEFAULT_VALIDATE_OPTIONS
+):void => {
+  const error = validate(validationExpression, value, options)
 
   if (error !== null) {
     throw new ValidationError([error], value)
   }
 }
 
-export const validateAllThrow = (
-  options:ValidateOptions,
-  validations:Validation[],
-  value:any
-) => {
-  const errors = validateAll(options, validations, value)
+// export const validateCases = (
+//   parallelCases:ValidationCase[],
+//   value:any,
+//   { interpreters }:ValidateOptions = DEFAULT_VALIDATE_OPTIONS
+// ):ValidationErrorSpec[] => (
+//   parallelCases.map(([condition, error]) => (
+//     evaluate({
+//       interpreters,
+//       scope: { $$VALUE: value }
+//     }, condition)
+//       ? null
+//       : typeof error === 'string'
+//         ? { code: error }
+//         : error
+//   ))
+//   .filter(result => result !== null) as ValidationErrorSpec[]
+// )
 
-  if (errors !== null) {
-    throw new ValidationError(errors, value)
-  }
-}
+// export const validateCasesThrow = (
+//   parallelCases:ValidationCase[],
+//   value:any,
+//   options:ValidateOptions
+// ):void => {
+//   const errors = validateCases(parallelCases, value, options)
+
+//   if (errors.length > 0) {
+//     throw new ValidationError(errors, value)
+//   }
+// }
