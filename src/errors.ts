@@ -1,5 +1,13 @@
 import { ValidationErrorSpec } from './types'
 
+/**
+ * @typedef {Error} ValidationError
+ * @property {Error} validationError
+ * @property {string} validationError.name
+ * @property {string} validationError.message
+ * @property {ValidationErrorSpec[]} validationError.errors
+ * @property {*} validationError.value
+ */
 export class ValidationError extends Error {
   constructor(errors, value) {
     super(errors.map(error => (error.message || error.code)).join('; '))
