@@ -6,9 +6,11 @@
   "module": "dist/index.mjs",
   "scripts": {
     "test": "jest --coverage",
-    "develop": "jest --watch",
+    "dev": "jest --watch",
+    "dev:readme": "readme --watch",
     "build": "rm -rf dist && rollup --config ./rollup/build.config.js && npm run tsc-declaration",
-    "prepublish": "npm run build",
+    "prepare": "npm run build && readme",
+    "readme": "readme",
     "update-dependencies": "npx npm-check-updates -u",
     "tsc-declaration": "tsc --declaration --emitDeclarationOnly --declarationDir dist"
   },
@@ -18,6 +20,7 @@
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-typescript": "^7.12.7",
+    "@orioro/readme": "^0.3.2",
     "@rollup/plugin-babel": "^5.2.2",
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-node-resolve": "^11.1.0",
