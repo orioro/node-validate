@@ -15,6 +15,8 @@ npm install @orioro/validate
 - [`validate(validationExpression, value, options)`](#validatevalidationexpression-value-options)
 - [`validateThrow(validationExpression, value, options)`](#validatethrowvalidationexpression-value-options)
 - [`sequentialCases(cases)`](#sequentialcasescases)
+- [`parallelCases(cases)`](#parallelcasescases)
+- [`allowValues(allowedValues, validation)`](#allowvaluesallowedvalues-validation)
 
 
 
@@ -82,5 +84,33 @@ is encountered throws a `ValidationError`.
 
 ##### `sequentialCases(cases)`
 
+Takes an array of `ValidationCases` and returns a `ValidationExpression`
+to be used with either `validate` or `validateThrow`.
+
+The returned expression evaluates each case sequentially
+and if any of the cases returns a non-`null` value, the
+validation is interrupted and remaining cases are not evaluated.
+
 - `cases` {[ValidationCase](#validationcase)[]}
+- Returns: {ValidationExpression} 
+
+##### `parallelCases(cases)`
+
+Takes an array of `ValidationCases` and returns a `ValidationExpression`
+to be used with either `validate` or `validateThrow`.
+
+The returned expression evaluates all cases in parallel and
+returns an array of all errors found.
+
+- `cases` {[ValidationCase](#validationcase)[]}
+- Returns: {ValidationExpression} 
+
+##### `allowValues(allowedValues, validation)`
+
+Wraps the given `validationExpression` so that it returns
+`null` (no error) if the value equals any of the specified
+`allowedValues`.
+
+- `allowedValues` {*[]}
+- `validation` {ValidationExpression}
 - Returns: {ValidationExpression}
