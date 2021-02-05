@@ -26,47 +26,83 @@ const NOT_EVEN_ERR = {
   message: 'Must be an even number'
 }
 
-test('sequentialCases', () => {
-  const validation = sequentialCases([
-    [INVALID_NUMBER_COND, INVALID_NUMBER_ERR],
-    [OUT_OF_RANGE_COND, OUT_OF_RANGE_ERR],
-    [NOT_EVEN_COND, NOT_EVEN_ERR]
-  ])
+describe('sequentialCases(cases)', () => {
+  test('', () => {
+    const validation = sequentialCases([
+      [INVALID_NUMBER_COND, INVALID_NUMBER_ERR],
+      [OUT_OF_RANGE_COND, OUT_OF_RANGE_ERR],
+      [NOT_EVEN_COND, NOT_EVEN_ERR]
+    ])
 
-  const expectations = [
-    [null, [INVALID_NUMBER_ERR]],
-    [undefined, [INVALID_NUMBER_ERR]],
-    [10, null],
-    [0, [OUT_OF_RANGE_ERR]],
-    [11, [OUT_OF_RANGE_ERR]]
-  ]
+    const expectations = [
+      [null, [INVALID_NUMBER_ERR]],
+      [undefined, [INVALID_NUMBER_ERR]],
+      [10, null],
+      [0, [OUT_OF_RANGE_ERR]],
+      [11, [OUT_OF_RANGE_ERR]]
+    ]
 
-  expectations.forEach(([input, expected]) => {
-    expect(validate(validation, input)).toEqual(expected)
+    expectations.forEach(([input, expected]) => {
+      expect(validate(validation, input)).toEqual(expected)
+    })
+  })
+
+  test('empty cases (should always return valid)', () => {
+    const validation = sequentialCases([])
+
+    const expectations = [
+      [null, null],
+      [undefined, null],
+      [10, null],
+      [0, null],
+      [11, null]
+    ]
+
+    expectations.forEach(([input, expected]) => {
+      expect(validate(validation, input)).toEqual(expected)
+    })
   })
 })
 
-test('parallelCases(cases)', () => {
-  const validation = parallelCases([
-    [INVALID_NUMBER_COND, INVALID_NUMBER_ERR],
-    [OUT_OF_RANGE_COND, OUT_OF_RANGE_ERR],
-    [NOT_EVEN_COND, NOT_EVEN_ERR]
-  ])
+describe('parallelCases(cases)', () => {
+  test('', () => {
+    const validation = parallelCases([
+      [INVALID_NUMBER_COND, INVALID_NUMBER_ERR],
+      [OUT_OF_RANGE_COND, OUT_OF_RANGE_ERR],
+      [NOT_EVEN_COND, NOT_EVEN_ERR]
+    ])
 
-  const expectations = [
-    [null, TypeError],
-    [undefined, TypeError],
-    [10, null],
-    [0, [OUT_OF_RANGE_ERR]],
-    [11, [OUT_OF_RANGE_ERR, NOT_EVEN_ERR]]
-  ]
+    const expectations = [
+      [null, TypeError],
+      [undefined, TypeError],
+      [10, null],
+      [0, [OUT_OF_RANGE_ERR]],
+      [11, [OUT_OF_RANGE_ERR, NOT_EVEN_ERR]]
+    ]
 
-  expectations.forEach(([input, expected]) => {
-    if (expected === TypeError) {
-      expect(() => validate(validation, input)).toThrow(TypeError)
-    } else {
+    expectations.forEach(([input, expected]) => {
+      if (expected === TypeError) {
+        expect(() => validate(validation, input)).toThrow(TypeError)
+      } else {
+        expect(validate(validation, input)).toEqual(expected)
+      }
+    })
+  })
+
+  test('empty cases (should always return valid)', () => {
+    const validation = parallelCases([])
+
+    const expectations = [
+      [null, null],
+      [undefined, null],
+      [10, null],
+      [0, null],
+      [11, null]
+    ]
+
+    expectations.forEach(([input, expected]) => {
       expect(validate(validation, input)).toEqual(expected)
-    }
+    })
   })
 })
 
