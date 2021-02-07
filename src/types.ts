@@ -20,4 +20,4 @@ export type ValidationErrorSpec = {
 /**
  * @typedef {[BooleanExpression, ValidationErrorSpec]} ValidationCase
  */
-export type ValidationCase = [BooleanExpression, ValidationErrorSpec]
+export type ValidationCase = [BooleanExpression, ValidationErrorSpec | string]
