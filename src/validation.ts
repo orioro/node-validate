@@ -1,5 +1,5 @@
 import { Expression } from '@orioro/expression'
-import { ValidationCase } from './types'
+import { ValidationCase, ValidationErrorSpec } from './types'
 
 /**
  * Takes an array of `ValidationCases` and returns a `ValidationExpression`
@@ -74,5 +74,26 @@ export const allowValues = (
   '$if',
   ['$in', allowedValues],
   null,
+  validation
+])
+
+/**
+ * Wraps the given `validationExpression` so that it returns
+ * the given `error` if the value specified equals any of the
+ * specified `prohibitedValues`
+ * @function prohibitValues
+ * @param {*[]} prohibitedValues
+ * @param {ValidationErrorSpec | string} error
+ * @param {ValidationExpression} validation Validation to be wrapped
+ * @returns {ValidationExpression}
+ */
+export const prohibitValues = (
+  prohibitedValues:any,
+  error:(ValidationErrorSpec | string),
+  validation
+):Expression => ([
+  '$if',
+  ['$in', prohibitedValues],
+  error,
   validation
 ])

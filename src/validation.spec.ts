@@ -2,7 +2,8 @@ import {
   validate,
   sequentialCases,
   parallelCases,
-  allowValues
+  allowValues,
+  prohibitValues
 } from './index'
 
 const INVALID_NUMBER_COND = ['$eq', 'number', ['$type']]
@@ -175,7 +176,26 @@ describe('allowValues', () => {
       expect(validate(validation, input)).toEqual(expected)
     })
   })
-
 })
 
+describe('prohibitValues(values, error, validation)', () => {
+  test('', () => {
+    const validation = prohibitValues([undefined, null], 'REQUIRED_ERROR', parallelCases([
+      [INVALID_NUMBER_COND, INVALID_NUMBER_ERR],
+      [OUT_OF_RANGE_COND, OUT_OF_RANGE_ERR],
+      [NOT_EVEN_COND, NOT_EVEN_ERR]
+    ]))
 
+    const expectations = [
+      [null, [{ code: 'REQUIRED_ERROR' }]],
+      [undefined, [{ code: 'REQUIRED_ERROR'}]],
+      [10, null],
+      [0, [OUT_OF_RANGE_ERR]],
+      [11, [OUT_OF_RANGE_ERR, NOT_EVEN_ERR]]
+    ]
+
+    expectations.forEach(([input, expected]) => {
+      expect(validate(validation, input)).toEqual(expected)
+    })
+  })
+})
