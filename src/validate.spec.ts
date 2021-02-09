@@ -1,5 +1,6 @@
 import {
-  validate
+  validate,
+  normalizeValidationResult
 } from './index'
 
 const INVALID_NUMBER_COND = ['$eq', 'number', ['$type']]
@@ -109,5 +110,41 @@ describe('validate(validation, value, options)', () => {
     expectations.forEach(([input, expected]) => {
       expect(validate(validation, input)).toEqual(expected)
     })
+  })
+})
+
+describe('normalizeValidationResult(result)', () => {
+  test('null', () => {
+    expect(normalizeValidationResult(null)).toEqual(null)
+  })
+
+  test('[] - empty array', () => {
+    expect(normalizeValidationResult([])).toEqual(null)
+  })
+
+  test('\'ERROR_CODE\' - single string format error code', () => {
+    expect(normalizeValidationResult('ERROR_CODE'))
+      .toEqual([
+        { code: 'ERROR_CODE' }
+      ])
+  })
+
+  test('{ code: \'ERROR_CODE\' } - single object error spec', () => {
+    expect(normalizeValidationResult({
+      code: 'ERROR_CODE'
+    }))
+    .toEqual([
+      { code: 'ERROR_CODE' }
+    ])
+  })
+
+  test('[\'ERROR_CODE\', { code: \'ANOTHER_ERROR_CODE\'}] - multiple errors in different formats', () => {
+    expect(normalizeValidationResult([
+      'ERROR_CODE',
+      { code: 'ANOTHER_ERROR_CODE', message: 'Some error message' }
+    ])).toEqual([
+      { code: 'ERROR_CODE' },
+      { code: 'ANOTHER_ERROR_CODE', message: 'Some error message' }
+    ])
   })
 })

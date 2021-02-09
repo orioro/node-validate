@@ -6,14 +6,14 @@ import { BooleanExpression } from '@orioro/expression'
  * @property {string} validationErrorSpec.code Should be a computer-friendly string
  *                                             which helps identifying the error.
  *                                             Usually not shown to the end-user. 
- * @property {string} validationErrorSpec.messsage Should be a human-friendly string
- *                                                 that might be showdn to the end-user
- *                                                 and explain the error's circumstances
- *                                                 and possible solutions.
+ * @property {string | *} [validationErrorSpec.messsage] Should be a human-friendly string
+ *                                                       that might be showdn to the end-user
+ *                                                       and explain the error's circumstances
+ *                                                       and possible solutions.
  */
 export type ValidationErrorSpec = {
   code: string,
-  message: string,
+  message?: string | any, // Allow {any} in order to support custom message generators / formats
   [key: string]: any
 }
 

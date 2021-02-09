@@ -27,6 +27,40 @@ const DEFAULT_VALIDATE_OPTIONS = {
 }
 
 /**
+ * Utility function that normalizes the validation result.
+ * Takes as parameter the raw validation result output
+ * (either `ValidationErrorSpec`, `string`, `null`) and returns
+ * either `null` or a non-empty array of objects conforming to
+ * `ValidationErrorSpec`.
+ * 
+ * @function normalizeValidationResult
+ * @param {ValidationErrorSpec | string | null | (ValidationErrorSpec | string)[]} result
+ * @returns {ValidationErrorSpec[] | null}
+ */
+export const normalizeValidationResult = (
+  result:(
+    ValidationErrorSpec |
+    string |
+    null |
+    (ValidationErrorSpec | string)[]
+  )
+):(ValidationErrorSpec[] | null) => {
+  return typeof result === 'string'
+    ? [{ code: result }]
+    : Array.isArray(result)
+      ? result.length === 0
+        ? null
+        : result.map(r => (
+            typeof r === 'string'
+              ? { code: r }
+              : r
+          ))
+      : result === null
+        ? null
+        : [result]
+}
+
+/**
  * Executes a validation expression against the given value.
  * Returns either an `Array` of `ValidationErrorSpec` objects
  * or `null` (which indicates there were no errors found and the
@@ -59,15 +93,7 @@ export const validate = (
     scope: { $$VALUE: value }
   }, validationExpression)
 
-  return typeof result === 'string'
-    ? [{ code: result }]
-    : Array.isArray(result)
-      ? result.length === 0
-        ? null
-        : result
-      : result === null
-        ? null
-        : [result]
+  return normalizeValidationResult(result)
 }
 
 /**

@@ -12,11 +12,13 @@ npm install @orioro/validate
 - [`ValidationCase`](#validationcase)
 - [`ValidationError`](#validationerror)
 - [`ValidateOptions`](#validateoptions)
+- [`normalizeValidationResult(result)`](#normalizevalidationresultresult)
 - [`validate(validationExpression, value, options)`](#validatevalidationexpression-value-options)
 - [`validateThrow(validationExpression, value, options)`](#validatethrowvalidationexpression-value-options)
 - [`sequentialCases(cases)`](#sequentialcasescases)
 - [`parallelCases(cases)`](#parallelcasescases)
 - [`allowValues(allowedValues, validation)`](#allowvaluesallowedvalues-validation)
+- [`prohibitValues(prohibitedValues, error, validation)`](#prohibitvaluesprohibitedvalues-error-validation)
 
 
 
@@ -24,7 +26,7 @@ npm install @orioro/validate
 
 - `validationErrorSpec` {Object}
   - `code` {string}
-  - `messsage` {string}
+  - `messsage` {string | *}
 
 ##### `ValidationCase`
 
@@ -48,6 +50,17 @@ Options for calling `validate`
 
 - `options` {Object}
   - `interpreters` {Object}
+
+##### `normalizeValidationResult(result)`
+
+Utility function that normalizes the validation result.
+Takes as parameter the raw validation result output
+(either `ValidationErrorSpec`, `string`, `null`) and returns
+either `null` or a non-empty array of objects conforming to
+`ValidationErrorSpec`.
+
+- `result` {[ValidationError](#validationerror)Spec | string | null | ([ValidationErrorSpec](#validationerrorspec) | string)[]}
+- Returns: {[ValidationError](#validationerror)Spec[] | null} 
 
 ##### `validate(validationExpression, value, options)`
 
@@ -112,5 +125,16 @@ Wraps the given `validationExpression` so that it returns
 `allowedValues`.
 
 - `allowedValues` {*[]}
+- `validation` {ValidationExpression}
+- Returns: {ValidationExpression} 
+
+##### `prohibitValues(prohibitedValues, error, validation)`
+
+Wraps the given `validationExpression` so that it returns
+the given `error` if the value specified equals any of the
+specified `prohibitedValues`
+
+- `prohibitedValues` {*[]}
+- `error` {[ValidationError](#validationerror)Spec | string}
 - `validation` {ValidationExpression}
 - Returns: {ValidationExpression}
