@@ -2,28 +2,31 @@ import {
   parallelCases,
   sequentialCases,
   validateThrow,
-  ValidationError
+  ValidationError,
 } from './index'
 
 const INVALID_NUMBER_COND = ['$eq', 'number', ['$type']]
 const INVALID_NUMBER_ERR = {
   code: 'INVALID_NUMBER_ERR',
-  message: 'Must be a number'
+  message: 'Must be a number',
 }
 
-const OUT_OF_RANGE_COND = ['$and', [
-  ['$gte', 1],
-  ['$lte', 10]
-]]
+const OUT_OF_RANGE_COND = [
+  '$and',
+  [
+    ['$gte', 1],
+    ['$lte', 10],
+  ],
+]
 const OUT_OF_RANGE_ERR = {
   code: 'OUT_OF_RANGE_ERR',
-  message: 'Must be a number between 1 and 10'
+  message: 'Must be a number between 1 and 10',
 }
 
 const NOT_EVEN_COND = ['$eq', 0, ['$mathMod', 2]]
 const NOT_EVEN_ERR = {
   code: 'NOT_EVEN_ERR',
-  message: 'Must be an even number'
+  message: 'Must be an even number',
 }
 
 describe('validateThrow(validation, value, options)', () => {
@@ -31,7 +34,7 @@ describe('validateThrow(validation, value, options)', () => {
     const validation = parallelCases([
       [INVALID_NUMBER_COND, INVALID_NUMBER_ERR],
       [OUT_OF_RANGE_COND, OUT_OF_RANGE_ERR],
-      [NOT_EVEN_COND, NOT_EVEN_ERR]
+      [NOT_EVEN_COND, NOT_EVEN_ERR],
     ])
 
     const expectations = [
@@ -41,13 +44,17 @@ describe('validateThrow(validation, value, options)', () => {
       [8, null],
       [0, ValidationError],
       [11, ValidationError],
-      [7, ValidationError]
+      [7, ValidationError],
     ]
+
+    expect.assertions(expectations.length)
 
     expectations.forEach(([input, Expected]) => {
       if (Expected === null) {
+        // eslint-disable-next-line jest/no-conditional-expect
         expect(validateThrow(validation, input)).toEqual(undefined)
       } else {
+        // eslint-disable-next-line jest/no-conditional-expect
         expect(() => validateThrow(validation, input)).toThrow(Expected)
       }
     })
@@ -57,7 +64,7 @@ describe('validateThrow(validation, value, options)', () => {
     const validation = sequentialCases([
       [INVALID_NUMBER_COND, INVALID_NUMBER_ERR],
       [OUT_OF_RANGE_COND, OUT_OF_RANGE_ERR],
-      [NOT_EVEN_COND, NOT_EVEN_ERR]
+      [NOT_EVEN_COND, NOT_EVEN_ERR],
     ])
 
     const expectations = [
@@ -67,13 +74,17 @@ describe('validateThrow(validation, value, options)', () => {
       [8, null],
       [0, ValidationError],
       [11, ValidationError],
-      [7, ValidationError]
+      [7, ValidationError],
     ]
+
+    expect.assertions(expectations.length)
 
     expectations.forEach(([input, Expected]) => {
       if (Expected === null) {
+        // eslint-disable-next-line jest/no-conditional-expect
         expect(validateThrow(validation, input)).toEqual(undefined)
       } else {
+        // eslint-disable-next-line jest/no-conditional-expect
         expect(() => validateThrow(validation, input)).toThrow(Expected)
       }
     })

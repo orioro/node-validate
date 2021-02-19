@@ -1,27 +1,27 @@
-import {
-  validate,
-  normalizeValidationResult
-} from './index'
+import { validate, normalizeValidationResult } from './index'
 
 const INVALID_NUMBER_COND = ['$eq', 'number', ['$type']]
 const INVALID_NUMBER_ERR = {
   code: 'INVALID_NUMBER_ERR',
-  message: 'Must be a number'
+  message: 'Must be a number',
 }
 
-const OUT_OF_RANGE_COND = ['$and', [
-  ['$gte', 1],
-  ['$lte', 10]
-]]
+const OUT_OF_RANGE_COND = [
+  '$and',
+  [
+    ['$gte', 1],
+    ['$lte', 10],
+  ],
+]
 const OUT_OF_RANGE_ERR = {
   code: 'OUT_OF_RANGE_ERR',
-  message: 'Must be a number between 1 and 10'
+  message: 'Must be a number between 1 and 10',
 }
 
 const NOT_EVEN_COND = ['$eq', 0, ['$mathMod', 2]]
 const NOT_EVEN_ERR = {
   code: 'NOT_EVEN_ERR',
-  message: 'Must be an even number'
+  message: 'Must be an even number',
 }
 
 describe('validate(validation, value, options)', () => {
@@ -31,9 +31,9 @@ describe('validate(validation, value, options)', () => {
       [
         [['$not', INVALID_NUMBER_COND], INVALID_NUMBER_ERR],
         [['$not', OUT_OF_RANGE_COND], OUT_OF_RANGE_ERR],
-        [['$not', NOT_EVEN_COND], NOT_EVEN_ERR]
+        [['$not', NOT_EVEN_COND], NOT_EVEN_ERR],
       ],
-      null
+      null,
     ]
 
     const expectations = [
@@ -43,7 +43,7 @@ describe('validate(validation, value, options)', () => {
       [8, null],
       [0, [OUT_OF_RANGE_ERR]],
       [11, [OUT_OF_RANGE_ERR]],
-      [7, [NOT_EVEN_ERR]]
+      [7, [NOT_EVEN_ERR]],
     ]
 
     expectations.forEach(([input, expected]) => {
@@ -61,18 +61,15 @@ describe('validate(validation, value, options)', () => {
             '$if',
             ['$evaluate', ['$value', '0'], ['$value', '$$PARENT_SCOPE']],
             null,
-            ['$value', '1']
+            ['$value', '1'],
           ],
           [
             [INVALID_NUMBER_COND, INVALID_NUMBER_ERR],
             [OUT_OF_RANGE_COND, OUT_OF_RANGE_ERR],
-            [NOT_EVEN_COND, NOT_EVEN_ERR]
-          ]
+            [NOT_EVEN_COND, NOT_EVEN_ERR],
+          ],
         ],
-        [
-          '$arrayFilter',
-          ['$notEq', null]
-        ]
+        ['$arrayFilter', ['$notEq', null]],
       ],
     ]
 
@@ -81,7 +78,7 @@ describe('validate(validation, value, options)', () => {
       [8, null],
       [0, [OUT_OF_RANGE_ERR]],
       [11, [OUT_OF_RANGE_ERR, NOT_EVEN_ERR]],
-      [7, [NOT_EVEN_ERR]]
+      [7, [NOT_EVEN_ERR]],
     ]
 
     expectations.forEach(([input, expected]) => {
@@ -94,9 +91,9 @@ describe('validate(validation, value, options)', () => {
       '$switch',
       [
         [['$not', INVALID_NUMBER_COND], 'INVALID_NUMBER_ERR'],
-        [['$not', OUT_OF_RANGE_COND], 'OUT_OF_RANGE_ERR']
+        [['$not', OUT_OF_RANGE_COND], 'OUT_OF_RANGE_ERR'],
       ],
-      null
+      null,
     ]
 
     const expectations = [
@@ -104,7 +101,7 @@ describe('validate(validation, value, options)', () => {
       [undefined, [{ code: 'INVALID_NUMBER_ERR' }]],
       [10, null],
       [0, [{ code: 'OUT_OF_RANGE_ERR' }]],
-      [11, [{ code: 'OUT_OF_RANGE_ERR' }]]
+      [11, [{ code: 'OUT_OF_RANGE_ERR' }]],
     ]
 
     expectations.forEach(([input, expected]) => {
@@ -122,29 +119,29 @@ describe('normalizeValidationResult(result)', () => {
     expect(normalizeValidationResult([])).toEqual(null)
   })
 
-  test('\'ERROR_CODE\' - single string format error code', () => {
-    expect(normalizeValidationResult('ERROR_CODE'))
-      .toEqual([
-        { code: 'ERROR_CODE' }
-      ])
-  })
-
-  test('{ code: \'ERROR_CODE\' } - single object error spec', () => {
-    expect(normalizeValidationResult({
-      code: 'ERROR_CODE'
-    }))
-    .toEqual([
-      { code: 'ERROR_CODE' }
+  test("'ERROR_CODE' - single string format error code", () => {
+    expect(normalizeValidationResult('ERROR_CODE')).toEqual([
+      { code: 'ERROR_CODE' },
     ])
   })
 
-  test('[\'ERROR_CODE\', { code: \'ANOTHER_ERROR_CODE\'}] - multiple errors in different formats', () => {
-    expect(normalizeValidationResult([
-      'ERROR_CODE',
-      { code: 'ANOTHER_ERROR_CODE', message: 'Some error message' }
-    ])).toEqual([
+  test("{ code: 'ERROR_CODE' } - single object error spec", () => {
+    expect(
+      normalizeValidationResult({
+        code: 'ERROR_CODE',
+      })
+    ).toEqual([{ code: 'ERROR_CODE' }])
+  })
+
+  test("['ERROR_CODE', { code: 'ANOTHER_ERROR_CODE'}] - multiple errors in different formats", () => {
+    expect(
+      normalizeValidationResult([
+        'ERROR_CODE',
+        { code: 'ANOTHER_ERROR_CODE', message: 'Some error message' },
+      ])
+    ).toEqual([
       { code: 'ERROR_CODE' },
-      { code: 'ANOTHER_ERROR_CODE', message: 'Some error message' }
+      { code: 'ANOTHER_ERROR_CODE', message: 'Some error message' },
     ])
   })
 })

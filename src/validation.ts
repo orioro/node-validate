@@ -8,21 +8,16 @@ import { ValidationCase, ValidationErrorSpec } from './types'
  * The returned expression evaluates each case sequentially
  * and if any of the cases returns a non-`null` value, the
  * validation is interrupted and remaining cases are not evaluated.
- * 
+ *
  * @function sequentialCases
  * @param {ValidationCase[]} cases
  * @returns {ValidationExpression}
  */
-export const sequentialCases = (
-  cases:ValidationCase[]
-):Expression => ([
+export const sequentialCases = (cases: ValidationCase[]): Expression => [
   '$switch',
-  cases.map(([condition, error]) => ([
-    ['$not', condition],
-    error
-  ])),
-  null
-])
+  cases.map(([condition, error]) => [['$not', condition], error]),
+  null,
+]
 
 /**
  * Takes an array of `ValidationCases` and returns a `ValidationExpression`
@@ -30,14 +25,12 @@ export const sequentialCases = (
  *
  * The returned expression evaluates all cases in parallel and
  * returns an array of all errors found.
- * 
+ *
  * @function parallelCases
  * @param {ValidationCase[]} cases
  * @returns {ValidationExpression}
  */
-export const parallelCases = (
-  cases:ValidationCase[]
-):Expression => ([
+export const parallelCases = (cases: ValidationCase[]): Expression => [
   '$pipe',
   [
     [
@@ -46,36 +39,28 @@ export const parallelCases = (
         '$if',
         ['$evaluate', ['$value', '0'], ['$value', '$$PARENT_SCOPE']],
         null,
-        ['$value', '1']
+        ['$value', '1'],
       ],
-      cases
+      cases,
     ],
-    [
-      '$arrayFilter',
-      ['$notEq', null]
-    ]
-  ]
-])
+    ['$arrayFilter', ['$notEq', null]],
+  ],
+]
 
 /**
  * Wraps the given `validationExpression` so that it returns
  * `null` (no error) if the value equals any of the specified
  * `allowedValues`.
- * 
+ *
  * @function allowValues
  * @param {*[]} allowedValues Values to be allowed
  * @param {ValidationExpression} validation Validation to be wrapped
  * @returns {ValidationExpression}
  */
 export const allowValues = (
-  allowedValues:any[],
-  validation:Expression
-):Expression => ([
-  '$if',
-  ['$in', allowedValues],
-  null,
-  validation
-])
+  allowedValues: any[],
+  validation: Expression
+): Expression => ['$if', ['$in', allowedValues], null, validation]
 
 /**
  * Wraps the given `validationExpression` so that it returns
@@ -88,12 +73,7 @@ export const allowValues = (
  * @returns {ValidationExpression}
  */
 export const prohibitValues = (
-  prohibitedValues:any,
-  error:(ValidationErrorSpec | string),
-  validation
-):Expression => ([
-  '$if',
-  ['$in', prohibitedValues],
-  error,
-  validation
-])
+  prohibitedValues: any, // eslint-disable-line @typescript-eslint/explicit-module-boundary-types
+  error: ValidationErrorSpec | string,
+  validation: Expression
+): Expression => ['$if', ['$in', prohibitedValues], error, validation]

@@ -9,8 +9,11 @@ import { ValidationErrorSpec } from './types'
  * @property {*} validationError.value
  */
 export class ValidationError extends Error {
-  constructor(errors, value) {
-    super(errors.map(error => (error.message || error.code)).join('; '))
+  constructor(
+    errors: ValidationErrorSpec[],
+    value: any // eslint-disable-line @typescript-eslint/explicit-module-boundary-types
+  ) {
+    super(errors.map((error) => error.message || error.code).join('; '))
 
     this.name = 'ValidationError'
     this.errors = errors
@@ -25,15 +28,20 @@ export class ValidationError extends Error {
     // this.__proto__ = ValidationError.prototype
   }
 
-  errors:ValidationErrorSpec[]
-  value:any
+  errors: ValidationErrorSpec[]
+  value: any
 
-  toJSON() {
+  toJSON(): {
+    name: string
+    message: string
+    value: any
+    errors: ValidationErrorSpec[]
+  } {
     return {
       name: this.name,
       message: this.message,
       value: this.value,
-      errors: this.errors
+      errors: this.errors,
     }
   }
 }
