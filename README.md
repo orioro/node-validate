@@ -4,6 +4,8 @@
 npm install @orioro/validate
 ```
 
+Utility methods to validate and generate validations expressions. Based on `@orioro/expression`.
+
 # Use cases
 
 # API
@@ -39,7 +41,7 @@ npm install @orioro/validate
 - `validationError` {Error}
   - `name` {string}
   - `message` {string}
-  - `errors` {[ValidationError](#validationerror)Spec[]}
+  - `errors` {[[ValidationError](#validationerror)Spec](#validationerrorspec)[]}
   - `value` {*}
 
 
@@ -59,8 +61,8 @@ Takes as parameter the raw validation result output
 either `null` or a non-empty array of objects conforming to
 `ValidationErrorSpec`.
 
-- `result` {[ValidationError](#validationerror)Spec | string | null | ([ValidationErrorSpec](#validationerrorspec) | string)[]}
-- Returns: {[ValidationError](#validationerror)Spec[] | null} 
+- `result` {[[ValidationError](#validationerror)Spec](#validationerrorspec) | string | null | (ValidationErrorSpec | string)[]}
+- Returns: {[[ValidationError](#validationerror)Spec](#validationerrorspec)[] | null} 
 
 ##### `validate(validationExpression, value, options)`
 
@@ -82,7 +84,7 @@ The expression may return one of these values:
 - `validationExpression` {Expression}
 - `value` {*}
 - `options` {[ValidateOptions](#[validate](#validatevalidationexpression-value-options)options)}
-- Returns: {null | [ValidationError](#validationerror)Spec[]} 
+- Returns: {null | [[ValidationError](#validationerror)Spec](#validationerrorspec)[]} 
 
 ##### `validateThrow(validationExpression, value, options)`
 
@@ -135,6 +137,6 @@ the given `error` if the value specified equals any of the
 specified `prohibitedValues`
 
 - `prohibitedValues` {*[]}
-- `error` {[ValidationError](#validationerror)Spec | string}
+- `error` {[[ValidationError](#validationerror)Spec](#validationerrorspec) | string}
 - `validation` {ValidationExpression}
 - Returns: {ValidationExpression}

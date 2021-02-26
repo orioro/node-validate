@@ -1487,10 +1487,10 @@
     lodash "^4.17.20"
     luxon "^1.25.0"
 
-"@orioro/readme@^0.3.2":
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/@orioro/readme/-/readme-0.3.2.tgz#cece8ab96370f499d505c1eb5e611e31e77e4a7a"
-  integrity sha512-pIHkuD069R6hgLfCluGwMpjvJlNjtvDVixBKoLbf8mb7ymt7w6j0lOuz90Pnv/yok2EzB8E8dX3wW+IZzWwGxw==
+"@orioro/readme@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@orioro/readme/-/readme-1.0.1.tgz#34ce761eb97e6a5184c6fdb6f8b95179236f9e0a"
+  integrity sha512-9PnhCowEsJIbUzS2hUyubFdO5+PgL5kO8MXnge8BvqqyC14GMfhDjenSJ2mRhYsibc7RmlxAebadYgKzk0qvVg==
   dependencies:
     "@orioro/cascade" "^3.0.0-beta.2"
     "@orioro/expression" "^1.0.0-alpha.4"
