@@ -3,6 +3,7 @@ import {
   Expression,
   ExpressionInterpreter,
   evaluate,
+  syncInterpreterList,
 } from '@orioro/expression'
 import { ValidationError } from './errors'
 
@@ -78,7 +79,7 @@ export const validate = (
 ): ValidationErrorSpec[] | null => {
   const result = evaluate(
     {
-      interpreters,
+      interpreters: syncInterpreterList(interpreters),
       scope: { $$VALUE: value },
     },
     validationExpression

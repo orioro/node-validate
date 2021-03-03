@@ -1465,6 +1465,11 @@
     "@octokit/openapi-types" "^4.0.0"
     "@types/node" ">= 8"
 
+"@orioro/cascade@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@orioro/cascade/-/cascade-3.0.0.tgz#8d839804e9f7436ff1b77636e9133e02a7f815be"
+  integrity sha512-4Tm5k6m2vc2XaKLuWxSi7aGUUlkjFLZBrLN7ehx5ZieFZES9jVUkkraKtkMUPsSi76RikAoLS9xUoAiapo3B9g==
+
 "@orioro/cascade@^3.0.0-beta.2":
   version "3.0.0-beta.2"
   resolved "https://registry.yarnpkg.com/@orioro/cascade/-/cascade-3.0.0-beta.2.tgz#61cfafc41e80b21e8fd034cd33261a51e491d1d9"
@@ -1478,14 +1483,13 @@
     lodash "^4.17.20"
     luxon "^1.25.0"
 
-"@orioro/expression@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@orioro/expression/-/expression-3.0.0.tgz#639c10b3374c1727bb3c2f3a9e5c9da188ac34fe"
-  integrity sha512-jxIXXCrsaXtTc3ANiJ7tQ88kqEd1AybGIaQeYV3eEM+ysh/rtjYGzGUyUfs0vk1+HjlRq1XBh7k+1f9LUVa4Ww==
+"@orioro/expression@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@orioro/expression/-/expression-5.0.0.tgz#74ea558bdf3a8428e11250f2fc56b576e058fc28"
+  integrity sha512-ZvL46DDMmMsh+w0xR+PxAxIndLKR3jny0R3vYf35rgi1TUykn9ApV88PvYDUsdyo2H8Z3c1B17GcWV5Esd2HGQ==
   dependencies:
-    "@orioro/validate-type" "^1.1.0"
+    "@orioro/typing" "^3.0.0"
     lodash "^4.17.20"
-    luxon "^1.25.0"
 
 "@orioro/readme@^1.0.1":
   version "1.0.1"
@@ -1505,10 +1509,13 @@
     vinyl-fs "^3.0.3"
     yargs "^16.2.0"
 
-"@orioro/validate-type@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@orioro/validate-type/-/validate-type-1.1.0.tgz#119664d989b983c34f0f2f24d8df7cc686827fbc"
-  integrity sha512-9nPbDMnTbbGBz/UaWUQs4FNOa4a673Rnv2DxXkqNbu2IpsKTSTZqBVEkmWyqr9/MpprmRQG9X7fOec1YoTqweg==
+"@orioro/typing@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@orioro/typing/-/typing-3.0.0.tgz#b30218d9e5075040ebc6a013ef5b419d0e2a3667"
+  integrity sha512-NuiteC4tN9kbraxcFzvMLlWB+2pTS1tiIVvJZdV/8MrL8M5RhI7V0kDv77O9JicuiBiUsTvYKqUXAR1OxWTTFA==
+  dependencies:
+    "@orioro/cascade" "^3.0.0"
+    is-plain-object "^5.0.0"
 
 "@rollup/plugin-babel@^5.2.3":
   version "5.2.3"
