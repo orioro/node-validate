@@ -15,8 +15,10 @@ Utility methods to validate and generate validations expressions. Based on `@ori
 - [`ValidationError`](#validationerror)
 - [`ValidateOptions`](#validateoptions)
 - [`normalizeValidationResult(result)`](#normalizevalidationresultresult)
-- [`validate(validationExpression, value, options)`](#validatevalidationexpression-value-options)
-- [`validateThrow(validationExpression, value, options)`](#validatethrowvalidationexpression-value-options)
+- [`validateSync(validationExpression, value, options)`](#validatesyncvalidationexpression-value-options)
+- [`validateAsync(validationExpression, value, options)`](#validateasyncvalidationexpression-value-options)
+- [`validateSyncThrow(validationExpression, value, options)`](#validatesyncthrowvalidationexpression-value-options)
+- [`validateAsyncThrow(validationExpression, value, options)`](#validateasyncthrowvalidationexpression-value-options)
 - [`sequentialCases(cases)`](#sequentialcasescases)
 - [`parallelCases(cases)`](#parallelcasescases)
 - [`allowValues(allowedValues, validation)`](#allowvaluesallowedvalues-validation)
@@ -48,7 +50,7 @@ Utility methods to validate and generate validations expressions. Based on `@ori
 
 ##### `ValidateOptions`
 
-Options for calling `validate`
+Options for calling `validateSync`
 
 - `options` {Object}
   - `interpreters` {Object}
@@ -64,7 +66,7 @@ either `null` or a non-empty array of objects conforming to
 - `result` {[[ValidationError](#validationerror)Spec](#validationerrorspec) | string | null | (ValidationErrorSpec | string)[]}
 - Returns: {[[ValidationError](#validationerror)Spec](#validationerrorspec)[] | null} 
 
-##### `validate(validationExpression, value, options)`
+##### `validateSync(validationExpression, value, options)`
 
 Executes a validation expression against the given value.
 Returns either an `Array` of `ValidationErrorSpec` objects
@@ -83,17 +85,30 @@ The expression may return one of these values:
 
 - `validationExpression` {Expression}
 - `value` {*}
-- `options` {[ValidateOptions](#[validate](#validatevalidationexpression-value-options)options)}
+- `options` {[ValidateOptions](#validateoptions)}
 - Returns: {null | [[ValidationError](#validationerror)Spec](#validationerrorspec)[]} 
 
-##### `validateThrow(validationExpression, value, options)`
+##### `validateAsync(validationExpression, value, options)`
 
-Performs same validation process as `validate` but if an error
+- `validationExpression` {Expression}
+- `value` {*}
+- `options` {[ValidateOptions](#validateoptions)}
+- Returns: {Promise<null | [[ValidationError](#validationerror)Spec](#validationerrorspec)[]>} 
+
+##### `validateSyncThrow(validationExpression, value, options)`
+
+Performs same validation process as `validateSync` but if an error
 is encountered throws a `ValidationError`.
 
 - `validationExpression` {Expression}
 - `value` {*}
-- `options` {[ValidateOptions](#[validate](#validatevalidationexpression-value-options)options)}
+- `options` {[ValidateOptions](#validateoptions)}
+
+##### `validateAsyncThrow(validationExpression, value, options)`
+
+- `validationExpression` {Expression}
+- `value` {*}
+- `options` {[ValidateOptions](#validateoptions)}
 
 
 

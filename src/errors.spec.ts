@@ -1,9 +1,15 @@
+import { interpreterList, ALL_EXPRESSIONS } from '@orioro/expression'
+
 import {
   parallelCases,
   sequentialCases,
-  validateThrow,
   ValidationError,
+  prepareValidate,
 } from './index'
+
+import { _validateCallLabel, _asyncCases } from '../spec/specUtil'
+
+import { testCases } from '@orioro/jest-util'
 
 const INVALID_NUMBER_COND = ['$eq', 'number', ['$type']]
 const INVALID_NUMBER_ERR = {
@@ -29,8 +35,19 @@ const NOT_EVEN_ERR = {
   message: 'Must be an even number',
 }
 
-describe('validateThrow(validation, value, options)', () => {
-  test('parallelCases', () => {
+const { validateSyncThrow, validateAsyncThrow } = prepareValidate({
+  interpreters: interpreterList({
+    ...ALL_EXPRESSIONS,
+    $asyncEcho: {
+      sync: null,
+      async: (context, value) =>
+        new Promise((resolve) => setTimeout(() => resolve(value), 50)),
+    },
+  }),
+})
+
+describe('validate[Sync/Async]Throw(validation, value, options)', () => {
+  describe('parallelCases', () => {
     const validation = parallelCases([
       [INVALID_NUMBER_COND, INVALID_NUMBER_ERR],
       [OUT_OF_RANGE_COND, OUT_OF_RANGE_ERR],
@@ -38,29 +55,31 @@ describe('validateThrow(validation, value, options)', () => {
     ])
 
     const expectations = [
-      [null, TypeError],
-      [undefined, TypeError],
-      [10, null],
-      [8, null],
-      [0, ValidationError],
-      [11, ValidationError],
-      [7, ValidationError],
+      [validation, null, TypeError],
+      [validation, undefined, TypeError],
+      [validation, 10, undefined],
+      [validation, 8, undefined],
+      [validation, 0, ValidationError],
+      [validation, 11, ValidationError],
+      [validation, 7, ValidationError],
     ]
 
-    expect.assertions(expectations.length)
+    describe('sync', () =>
+      testCases(
+        expectations,
+        validateSyncThrow,
+        _validateCallLabel('validateSyncThrow')
+      ))
 
-    expectations.forEach(([input, Expected]) => {
-      if (Expected === null) {
-        // eslint-disable-next-line jest/no-conditional-expect
-        expect(validateThrow(validation, input)).toEqual(undefined)
-      } else {
-        // eslint-disable-next-line jest/no-conditional-expect
-        expect(() => validateThrow(validation, input)).toThrow(Expected)
-      }
-    })
+    describe('async', () =>
+      testCases(
+        _asyncCases(expectations),
+        validateAsyncThrow,
+        _validateCallLabel('validateAsyncThrow')
+      ))
   })
 
-  test('sequentialCases', () => {
+  describe('sequentialCases', () => {
     const validation = sequentialCases([
       [INVALID_NUMBER_COND, INVALID_NUMBER_ERR],
       [OUT_OF_RANGE_COND, OUT_OF_RANGE_ERR],
@@ -68,25 +87,50 @@ describe('validateThrow(validation, value, options)', () => {
     ])
 
     const expectations = [
-      [null, ValidationError],
-      [undefined, ValidationError],
-      [10, null],
-      [8, null],
-      [0, ValidationError],
-      [11, ValidationError],
-      [7, ValidationError],
+      [validation, null, ValidationError],
+      [validation, undefined, ValidationError],
+      [validation, 10, undefined],
+      [validation, 8, undefined],
+      [validation, 0, ValidationError],
+      [validation, 11, ValidationError],
+      [validation, 7, ValidationError],
     ]
 
-    expect.assertions(expectations.length)
+    describe('sync', () =>
+      testCases(
+        expectations,
+        validateSyncThrow,
+        _validateCallLabel('validateSyncThrow')
+      ))
 
-    expectations.forEach(([input, Expected]) => {
-      if (Expected === null) {
-        // eslint-disable-next-line jest/no-conditional-expect
-        expect(validateThrow(validation, input)).toEqual(undefined)
-      } else {
-        // eslint-disable-next-line jest/no-conditional-expect
-        expect(() => validateThrow(validation, input)).toThrow(Expected)
-      }
+    describe('async', () =>
+      testCases(
+        _asyncCases(expectations),
+        validateAsyncThrow,
+        _validateCallLabel('validateAsyncThrow')
+      ))
+  })
+})
+
+describe('new ValidationError(errors, value) constructor', () => {
+  test('errors', () => {
+    const errorSpecs = [
+      { code: 'ERR_CODE_1', message: 'Some error 1' },
+      { code: 'ERR_CODE_2', message: 'Some error 2' },
+      { code: 'ERR_CODE_3' },
+    ]
+    const error = new ValidationError(errorSpecs, 'some-value')
+
+    expect(error.code).toEqual('ERR_VALIDATION')
+    expect(error.name).toEqual('ValidationError')
+    expect(error.errors).toEqual(errorSpecs)
+
+    expect(error.toJSON()).toEqual({
+      code: 'ERR_VALIDATION',
+      name: 'ValidationError',
+      message: error.message,
+      value: 'some-value',
+      errors: errorSpecs,
     })
   })
 })
